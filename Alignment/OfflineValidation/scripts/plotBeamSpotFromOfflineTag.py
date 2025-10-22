@@ -17,6 +17,7 @@ def unpack(i):
     low=i&0xFFFFFFFF 
     #return(high,low) 
     return low
+
 def plot(json_files, labels, output_file, f_ymin, f_ymax):
     CMS_Text_Size = 20
     CMS_Text = "Preliminary"
@@ -89,7 +90,6 @@ def plot(json_files, labels, output_file, f_ymin, f_ymax):
         for run in newX:
             origRun = getOrigRun(run,origX)
             if origRun in x:
-                
                 newXpruned.append(run)
                 new_y_store[ix].append(y_store[ix][x.index(origRun)]) 
                 new_y_err_store[ix].append(y_err_store[ix][x.index(origRun)])    
@@ -114,7 +114,6 @@ def plot(json_files, labels, output_file, f_ymin, f_ymax):
         # Plot
         plt.errorbar(newXpruned_new,  new_y_store[ix], yerr=new_y_err_store[ix], color = colors[ix], fmt='o',  capsize=5, label=labels[ix], zorder=1)
         plt.plot(newXpruned_new, poly1d_fn(newXpruned), '--', color = colors[ix], label="lin. "+labels[ix])
-
 
 
     # Extract the annotations from the first file (assuming all files have similar annotations)
@@ -188,7 +187,6 @@ if __name__ == "__main__":
     for file in input_files:
         name = file.split('.')[0]
         cmd = f"conddb --db  {file} list {name}"
-        print(cmd)
         output = subprocess.check_output([cmd], text=True, shell=True)
         lines = output.splitlines()
         count = 0
@@ -209,7 +207,6 @@ if __name__ == "__main__":
                 if (test):
                     
                     cmd = f"getPayloadData.py --plugin {plugin} --plot plot_BeamSpot_History{ylabel} --tag {tag} --time_type {time_type}  --iovs \'{iv}\' --db sqlite:{file} --test > toPlot_{ylabel}_{tag}.txt 2>&1"
-                    print(f"getPayloadData.py --plugin {plugin} --plot plot_BeamSpot_History{ylabel} --tag {tag} --time_type {time_type}  --iovs \'{iv}\' --db sqlite:{file} --test > toPlot_{ylabel}_{tag}.txt 2>&1")
                 else:
                     cmd = f"getPayloadData.py --plugin {plugin} --plot plot_BeamSpot_History{ylabel} --tag {tag} --time_type {time_type}  --iovs \'{iv}\' --db sqlite:{file} > toPlot_{ylabel}_{tag}.txt 2>&1"
                 os.system(cmd)
